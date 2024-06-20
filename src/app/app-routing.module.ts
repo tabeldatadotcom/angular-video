@@ -18,11 +18,11 @@ const routes: Routes = [
     component: AddUpdateComponent
   },
   {
-    path: "add/order/:id",
+    path: "add/order/:name",
     component: AddUpdateComponent
   },
   {
-    path: "order/:id",
+    path: "order/:name",
     component: ListOrderComponent
   },
 ];

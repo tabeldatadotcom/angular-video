@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Customer } from 'src/app/model/customer';
+import { Account } from 'src/app/model/customer';
 import { HomeService } from '../home.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { HomeService } from '../home.service';
 })
 export class ListComponent implements OnInit {
 
-  listCustomer: Customer[] = [
+  listCustomer: Account[] = [
     // https://mdbootstrap.com/img/new/avatars/8.jpg
   ];
 

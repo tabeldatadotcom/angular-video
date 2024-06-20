@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeService } from '../home.service';
+import { Account } from 'src/app/model/customer';
 
 @Component({
   selector: 'app-add-update',
@@ -10,64 +11,103 @@ import { HomeService } from '../home.service';
 })
 export class AddUpdateComponent implements OnInit {
   formInputCustomer!: FormGroup;
-  formInputOrder!: FormGroup;
+  // formInputOrder!: FormGroup;
+  transactionForm!: FormGroup;
   imageFile!: File;
   imageSrc: string =
     'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6.webp';
   type!: string;
-  customerId!: number;
+  customerName!: number;
   mode: string = '';
+
+  cities: any[] = [];
+  listAccount: any[] = [];
+
+  // account!: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private service: HomeService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    private activatedRoute: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((param) => {
-      this.customerId = param['id'];
-      if (param['id']) {
+      this.customerName = param['name'];
+      if (param['name']) {
         this.type = 'order';
+        // this.getDetailAccount();
       } else {
         this.type = 'customer';
       }
 
-      this.getOrderInfo();
-      this.mode = param['type'];
-      console.log(this.mode);
-      console.log(`customer id : ${param['id']}`);
-      console.log(`customer id : ${this.customerId}`);
+      // this.getOrderInfo();
+      this.getAllCity()
+      this.getAllAccounts()
+      // this.mode = param['type'];
+      // console.log(this.mode);
+      // console.log(`customer id : ${param['id']}`);
+      // console.log(`customer id : ${this.customerId}`);
     });
 
     this.formInputCustomer = this.formBuilder.group({
-      firstName: this.formBuilder.control(null),
-      lastName: this.formBuilder.control(null),
+      name: this.formBuilder.control(null),
       address: this.formBuilder.control(null),
       city: this.formBuilder.control(null),
       imageUrl: this.formBuilder.control(null),
     });
 
-    this.formInputOrder = this.formBuilder.group({
-      customerId: this.formBuilder.control(this.customerId),
-      product: this.formBuilder.control(null),
-      quantity: this.formBuilder.control(null),
+    this.transactionForm = this.formBuilder.group({
+      fromAccountName: this.formBuilder.control(this.customerName),
+      toAccountName: this.formBuilder.control(null),
+      amount: this.formBuilder.control(null),
+      transactionType: this.formBuilder.control('transfer'),
+      timestamp: this.formBuilder.control(new Date()),
+      status: this.formBuilder.control('success')
     });
 
-    console.log(`customer id -> ${this.customerId} ----> form input => ${this.formInputOrder.get('customerId')?.value}`)
+    // this.formInputOrder = this.formBuilder.group({
+    //   customerId: this.formBuilder.control(this.customerId),
+    //   product: this.formBuilder.control(null),
+    //   quantity: this.formBuilder.control(null),
+    // });
+
+    // console.log(`customer id -> ${this.customerId} ----> form input => ${this.formInputOrder.get('customerId')?.value}`)
   }
 
-  getOrderInfo() {
-    this.service.findByOrderId(this.customerId).subscribe((resp) => {
+  // getOrderInfo() {
+  //   this.service.findByOrderId(this.customerId).subscribe((resp) => {
+  //     console.log(resp.body);
+  //     this.formInputOrder.patchValue({
+  //       customerId: resp.body?.customerId,
+  //       product: resp.body?.product,
+  //       quantity: resp.body?.quantity,
+  //     });
+  //   });
+  // }
+
+  getAllAccounts(){
+    this.service.getList().subscribe((resp) => {
+      this.listAccount = resp.body!
+      this.changeDetectorRef.detectChanges();
+    })
+  }
+
+  getAllCity() {
+    this.service.getListCity().subscribe((resp) => {
       console.log(resp.body);
-      this.formInputOrder.patchValue({
-        customerId: resp.body?.customerId,
-        product: resp.body?.product,
-        quantity: resp.body?.quantity,
-      });
-    });
+      this.cities = resp.body!
+      this.changeDetectorRef.detectChanges();
+    })
   }
+
+  // getDetailAccount(){
+  //   this.service.findByCustomerId(this.customerId).subscribe((resp) => {
+  //     this.account = resp.body!
+  //   })
+  // }
 
   onFileChange(event: any) {
     const reader = new FileReader();
@@ -101,25 +141,25 @@ export class AddUpdateComponent implements OnInit {
         }
       });
     } else {
-      if (this.mode == 'edit') {
-        this.service.updateOrder(this.customerId, this.formInputOrder.value).subscribe((resp) => {
-          console.log(resp);
+      // if (this.mode == 'edit') {
+        // this.service.updateOrder(this.customerId, this.formInputOrder.value).subscribe((resp) => {
+        //   console.log(resp);
 
-          if (resp.status == 200) {
-            this.router.navigate(['order', this.customerId]);
+        //   if (resp.status == 200) {
+        //     this.router.navigate(['order', this.customerId]);
+        //   }
+        // });
+      // } else {
+        // console.log(`================== ${this.formInputOrder.value}`)
+        // this.transactionForm.patchValue({
+        //   fromAccountName: this.account.name
+        // });
+        this.service.saveTransaction(this.transactionForm.value).subscribe((resp) => {
+          if (resp.status == 201) {
+            this.router.navigate(['order', this.customerName]);
           }
         });
-      } else {
-        console.log(`================== ${this.formInputOrder.value}`)
-        this.formInputOrder.patchValue({
-          customerId: this.customerId
-        });
-        this.service.saveOrder(this.formInputOrder.value).subscribe((resp) => {
-          if (resp.status == 200) {
-            this.router.navigate(['order', this.customerId]);
-          }
-        });
-      }
+      // }
     }
   }
 }

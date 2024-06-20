@@ -1,12 +1,18 @@
-export class Order{
+export class Transaction{
     id!: number;
-    customerId!: number;
-    product!: string;
-    quantity!: number;
+    fromAccountName!: number;
+    toAccountName!: number;
+    amount!: number;
+    transactionType!: string;
+    timestamp!: string;
+    status!: string;
 }
 
-export class SaveOrder{
-    customerId!: number;
-    product!: string;
-    quantity!: number;
+export class SaveTransaction{
+    fromAccountName!: number;
+    toAccountName!: number;
+    amount!: number;
+    transactionType!: string;
+    timestamp!: string;
+    status!: string;
 }

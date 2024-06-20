@@ -1,15 +1,13 @@
-export class Customer {
+export class Account {
     id!: number;
-    firstName!: string;
-    lastName!: string;
+    name!: string;
     address!: string;
     city!: string;
     imageUrl!: string;
 }
 
-export class SaveCustomer {
-    firstName!: string;
-    lastName!: string;
+export class SaveAccount {
+    name!: string;
     address!: string;
     city!: string;
     imageUrl!: string;

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  api: "/api"
+  api: "/api",
+  apiTrx: "/api-trx",
+  apiReg: "/api-reg"
 };
 
 /*

@@ -1,22 +1,16 @@
 <div class="container">
     <div class="customer-form" *ngIf="type=='customer'">
         <div class="left">
-            <img [src]="imageSrc" alt="profile"
-                style=" width:250px">
+            <img [src]="imageSrc" alt="profile" style=" width:250px">
             <input class="custom-file-input" style="width: 100px; margin: 20px 20px;" type="file" value="Upload"
-            (change)="onFileChange($event)">
+                (change)="onFileChange($event)">
         </div>
         <div class="right">
             <form [formGroup]="formInputCustomer">
                 <div class="form-group mt-2">
-                    <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp"
-                        placeholder="First Name" formControlName="firstName">
-                </div>
-                <div class="form-group mt-2">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Last Name"
-                        formControlName="lastName">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Name"
+                        formControlName="name">
                 </div>
                 <div class="form-group mt-2">
                     <label for="address">Address</label>
@@ -25,34 +19,38 @@
                 </div>
                 <div class="form-group mt-2">
                     <label for="city">City</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="city" formControlName="city">
+                    <select class="form-control" id="city" formControlName="city">
+                        <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
+                    </select>
                 </div>
                 <div class="buttons">
                     <button type="submit" class="btn btn-primary mt-3" (click)="save()">Submit</button>
-                    <button type="button" class="btn btn-warning mt-3" style="margin-left: 20px;" routerLink="/">Back</button>
+                    <button type="button" class="btn btn-warning mt-3" style="margin-left: 20px;"
+                        routerLink="/">Back</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <form *ngIf="type=='order'" [formGroup]="formInputOrder">
-        <!-- <div class="form-group mt-2">
-            <label for="customerId">Customer Id</label>
-            <input type="text" class="form-control" id="customerId" aria-describedby="emailHelp"
-                placeholder="Customer Id" formControlName="customerId">
-        </div> -->
-        <div class="form-group mt-2">
-            <label for="product">Product</label>
-            <input type="text" class="form-control" id="product" placeholder="Product" formControlName="product">
-        </div>
-        <div class="form-group mt-2">
-            <label for="quantity">Quantity</label>
-            <input type="text" class="form-control" id="quantity" placeholder="Quantity" formControlName="quantity">
-        </div>
-        <div class="buttons">
-            <button type="submit" class="btn btn-primary mt-3" (click)="save()">Submit</button>
-            <button type="button" class="btn btn-warning mt-3" style="margin-left: 20px;" routerLink="/">Back</button>
-        </div>
-        
-    </form>
+    <div *ngIf="type=='order'">
+        <form [formGroup]="transactionForm">
+            <div class="form-group mt-2">
+                <label for="toAccountId">To Account</label>
+                <select class="form-control" id="toAccountName" formControlName="toAccountName">
+                    <option *ngFor="let item of listAccount" [value]="item.name">{{ item.name }}</option>
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" id="amount" placeholder="Amount" formControlName="amount">
+            </div>
+            <div class="buttons">
+                <button type="submit" class="btn btn-primary mt-3" (click)="save()">Submit</button>
+                <button type="button" class="btn btn-warning mt-3" style="margin-left: 20px;"
+                    routerLink="/">Back</button>
+            </div>
+        </form>
+    </div>
+
+
 </div>

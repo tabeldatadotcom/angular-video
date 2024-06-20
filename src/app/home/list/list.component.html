@@ -28,7 +28,7 @@
 
 <div class="container">
     <div class="title">
-        <h3 style="color: rgb(255, 255, 255);">Customers</h3>
+        <h3 style="color: rgb(255, 255, 255);">Accounts</h3>
         <button type="button" class="btn btn-info" [routerLink]="['/', 'add', 'customer']">Add</button>
       </div>
     <div class="row">
@@ -40,7 +40,7 @@
                             <img [src]="data.imageUrl" alt="profile image"
                                 style="width: 45px; height: 45px" class="rounded-circle" />
                             <div class="ms-3">
-                                <p class="fw-bold mb-1">{{data.firstName}} {{data.lastName}}</p>
+                                <p class="fw-bold mb-1">{{data.name}}</p>
                                 <p class="text-muted mb-0">{{data.address}}, {{data.city}}</p>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="card-footer border-0 bg-light p-2 d-flex justify-content-around">
-                    <a class="btn btn-link m-0 text-reset" [routerLink]="['/', 'order', data.id]" role="button" data-ripple-color="primary">Orders<i
+                    <a class="btn btn-link m-0 text-reset" [routerLink]="['/', 'order', data.name]" role="button" data-ripple-color="primary">transactions<i
                             class="fas fa-envelope ms-2"></i></a>
                 </div>
             </div>

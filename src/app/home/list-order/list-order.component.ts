@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Order } from 'src/app/model/order';
 import { HomeService } from '../home.service';
+import { Transaction } from 'src/app/model/order';
 
 @Component({
   selector: 'app-list-order',
@@ -9,7 +9,7 @@ import { HomeService } from '../home.service';
   styleUrls: ['./list-order.component.scss'],
 })
 export class ListOrderComponent implements OnInit {
-  listOrder: Order[] = [];
+  listTransaction: Transaction[] = [];
   customerId!: number;
   customerName!: string;
 
@@ -22,37 +22,37 @@ export class ListOrderComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       console.log(params);
-      this.customerId = params['id'];
+      this.customerName = params['name'];
     });
 
-    this.getCustomerInfo();
-    this.getListOrder();
+    // this.getCustomerInfo();
+    this.getListTransaction();
   }
 
-  getCustomerInfo() {
-    this.service.findByCustomerId(this.customerId).subscribe((resp) => {
-      console.log(resp.body);
-      this.customerName = resp.body!.firstName;
-    });
-  }
+  // getCustomerInfo() {
+  //   this.service.findByCustomerId(this.customerId).subscribe((resp) => {
+  //     console.log(resp.body);
+  //     // this.customerName = resp.body!.firstName;
+  //   });
+  // }
 
-  getListOrder() {
-    this.service.getListOrderByCustomer(this.customerId).subscribe((resp) => {
+  getListTransaction() {
+    this.service.getListTransactionByAccountName(this.customerName).subscribe((resp) => {
       console.log(resp);
-      this.listOrder = resp.body!;
+      this.listTransaction = resp.body!;
     });
   }
 
-  editOrder(id: any) {
-    this.service.findByOrderId(id).subscribe((resp) => {
-      console.log('hasil');
-    });
-  }
+  // editOrder(id: any) {
+  //   this.service.findByOrderId(id).subscribe((resp) => {
+  //     console.log('hasil');
+  //   });
+  // }
 
-  deleteOrder(id: any) {
-    this.service.deleteOrder(id).subscribe((resp) => {
-      this.getCustomerInfo();
-      this.getListOrder();
-    });
-  }
+  // deleteOrder(id: any) {
+  //   this.service.deleteOrder(id).subscribe((resp) => {
+  //     this.getCustomerInfo();
+  //     this.getListOrder();
+  //   });
+  // }
 }
